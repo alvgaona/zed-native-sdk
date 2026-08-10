@@ -6,17 +6,13 @@ authors = ["alvgaona <alvgaona@gmail.com>"]
 description = "Syntax highlighting and language server support for Native SDK .native markup"
 repository = "https://github.com/alvgaona/zed-native-sdk"
 
-# The grammar lives in this repo under grammar/ until it is split out. Zed checks the repository
-# out at `rev` and compiles `<path>/src/parser.c`, so the rev must name a commit that already
-# contains the generated parser — bumping it is always a second commit after a grammar change.
-#
-# The key must stay `native`: Zed compiles with -Wl,--export=tree_sitter_<key>, so a hyphen would
-# emit an invalid C symbol.
 [language_servers.native-markup]
 name = "native markup"
 languages = ["Native"]
 
+# The key must stay `native`: Zed compiles with -Wl,--export=tree_sitter_<key>, so a hyphen would
+# emit an invalid C symbol. Zed checks the repository out at `rev` and compiles src/parser.c, which
+# is why the grammar repo commits its generated parser.
 [grammars.native]
-repository = "file:///Users/alvaro/git/zed-native-sdk"
-rev = "d43e3ef5b56d39cec804fc6c59cdfb24c784c0e2"
-path = "grammar"
+repository = "https://github.com/alvgaona/tree-sitter-native"
+rev = "7a5b8678abf2ab4f0453f46ae99242dfc452c67c"

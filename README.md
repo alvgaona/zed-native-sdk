@@ -46,26 +46,22 @@ appear to be wired into the LSP path, so those errors still only surface from th
 
 | Path | What |
 | --- | --- |
-| `grammar/` | the Tree-sitter grammar; will be split into its own repo |
 | `languages/native/` | language config and the `.scm` queries |
 | `src/native_sdk.rs` | the extension binary, which resolves the language server |
+| `test/samples/` | markup exercising every shape the queries capture |
+
+The grammar lives in [tree-sitter-native](https://github.com/alvgaona/tree-sitter-native) and is
+pinned here by commit.
 
 ## Development
 
-`just check` runs everything CI does: manifest validation, a parser regeneration that fails on a
-stale commit, the corpus tests, and the extension build.
+`just check` validates the manifests and builds the extension. `just check-queries` runs every
+`.scm` file against a sibling `tree-sitter-native` checkout, which is what CI does at the pinned
+revision.
 
-The grammar's fixtures are mined from the SDK's own markup tests — its Zig source ships inside the
-npm package, and `ui_markup*tests.zig` carries several hundred snippets. `just fixtures` extracts
-them and keeps only what `native markup check` accepts, so the corpus tracks whichever SDK version
-is installed rather than being frozen at authoring time.
-
-Two things worth knowing before changing the grammar:
-
-- Zed compiles `grammar/src/parser.c` **directly** and never runs `tree-sitter generate`, so the
-  generated parser is committed and CI fails if it goes stale.
-- The manifest pins the grammar by commit, so a grammar change is always two commits: the change,
-  then the `rev` bump that points at it.
+To iterate on the grammar and the queries together, `just use-local-grammar` rewrites the manifest
+to point at your local checkout by `file://` URL and current HEAD; rebuild the dev extension to
+pick it up. Revert that line before committing.
 
 ## Why a grammar at all
 

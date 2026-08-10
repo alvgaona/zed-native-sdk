@@ -6,25 +6,6 @@ on:
   pull_request:
 
 jobs:
-  grammar:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - name: Install the tree-sitter CLI
-        working-directory: grammar
-        run: bun install --frozen-lockfile
-      - name: Regenerate the parser
-        working-directory: grammar
-        run: ./node_modules/.bin/tree-sitter generate
-      # Zed compiles src/parser.c straight from the repo and never runs `tree-sitter generate`,
-      # so a stale committed parser means Zed and CI disagree about the language.
-      - name: Fail if the committed parser is stale
-        run: git diff --exit-code grammar/src
-      - name: Run the corpus tests
-        working-directory: grammar
-        run: ./node_modules/.bin/tree-sitter test
-
   extension:
     runs-on: ubuntu-latest
     steps:
@@ -36,3 +17,29 @@ jobs:
         run: |
           rustup target add wasm32-wasip2
           cargo build --target wasm32-wasip2 --release
+
+  # The queries are the half of the language that lives in this repo, so they are checked against
+  # the grammar they target — at the exact revision the manifest pins.
+  queries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Check out the pinned grammar
+        run: |
+          rev=$(python3 -c "import tomllib; print(tomllib.load(open('extension.toml','rb'))['grammars']['native']['rev'])")
+          git clone https://github.com/alvgaona/tree-sitter-native grammar
+          git -C grammar checkout "$rev"
+      - name: Install the tree-sitter CLI
+        working-directory: grammar
+        run: bun install --frozen-lockfile
+      - name: Parse the samples
+        working-directory: grammar
+        run: ./node_modules/.bin/tree-sitter parse -q ../test/samples/*.native
+      - name: Run every query against the samples
+        working-directory: grammar
+        run: |
+          for q in ../languages/native/*.scm; do
+            echo "== $(basename "$q")"
+            ./node_modules/.bin/tree-sitter query "$q" ../test/samples/*.native >/dev/null
+          done

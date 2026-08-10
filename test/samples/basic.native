@@ -1,0 +1,26 @@
+<!-- A sample exercising every shape the queries capture. It is checked in so CI can run the
+     .scm files against a real parse without needing the SDK installed. -->
+
+<import src="components/md.native"/>
+
+<template name="md" args="blocks image_map trend=flat label=">
+  <column gap="12" padding="16">
+    <for each="blocks" key="key" as="b">
+      <if test="{b.is_code}">
+        <badge variant="outline" size="sm">{upper(b.lang_label)}</badge>
+        <button
+          size="sm"
+          variant="ghost"
+          icon="app:copy"
+          on-press="copy_code_block:{b.code_index}"
+          label="Copy code block"
+        />
+      </if>
+      <else>
+        <text wrap="true" disabled>{percent(done / total)} complete — {b.title}</text>
+      </else>
+    </for>
+    <text>{a or b and not c}</text>
+    <separator background="border" />
+  </column>
+</template>
