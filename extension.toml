@@ -13,4 +13,4 @@ languages = ["Native"]
 # The key has to be `native`: Zed exports tree_sitter_<key>, and a hyphen is not a C identifier.
 [grammars.native]
 repository = "https://github.com/alvgaona/tree-sitter-native"
-rev = "5aec6739853ddc752399c3b032ac91ba6e93acf3"
+rev = "7247f67287b6c8408a4f40da575da125baa0376a"
