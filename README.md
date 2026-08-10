@@ -1,9 +1,10 @@
 # Native SDK for Zed
 
-<p>
-	<a href="https://github.com/alvgaona/zed-native-sdk/actions/workflows/check.yml"><img src="https://img.shields.io/github/actions/workflow/status/alvgaona/zed-native-sdk/check.yml?branch=main&label=check&colorA=000000&colorB=c1c1c1&style=for-the-badge"></a>
-	<a href="https://github.com/alvgaona/zed-native-sdk/blob/main/LICENSE"><img src="https://img.shields.io/github/license/alvgaona/zed-native-sdk?colorA=000000&colorB=dd9999&style=for-the-badge"></a>
-	<a href="https://github.com/alvgaona/zed-native-sdk/stargazers"><img src="https://img.shields.io/github/stars/alvgaona/zed-native-sdk?colorA=000000&colorB=a06666&style=for-the-badge"></a>
+<p align="center">
+  <a href="https://github.com/alvgaona/zed-native-sdk/actions/workflows/check.yml"><img alt="CI status" src="https://img.shields.io/github/actions/workflow/status/alvgaona/zed-native-sdk/check.yml?branch=main&logo=githubactions&label=check&style=for-the-badge&logoColor=white&labelColor=000000&color=1c1c1c"></a>
+  <a href="https://zed.dev"><img alt="Zed extension" src="https://img.shields.io/badge/zed-extension-1c1c1c?style=for-the-badge&logo=zedindustries&logoColor=white&labelColor=000000"></a>
+  <a href="https://github.com/alvgaona/zed-native-sdk/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/tag/alvgaona/zed-native-sdk?logo=github&label=release&style=for-the-badge&logoColor=white&labelColor=000000&color=1c1c1c"></a>
+  <a href="https://github.com/alvgaona/zed-native-sdk/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/alvgaona/zed-native-sdk?logo=opensourceinitiative&label=license&style=for-the-badge&logoColor=white&labelColor=000000&color=1c1c1c"></a>
 </p>
 
 Language support for [Native SDK](https://native-sdk.dev/) `.native` markup in
