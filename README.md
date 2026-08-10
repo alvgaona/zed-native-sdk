@@ -72,19 +72,27 @@ Tree-sitter queries and ignores LSP semantic tokens.
 
 Two repos, and this one pins the other, so the order matters.
 
-1. Tag the grammar first. In `tree-sitter-native`, bump `version` in `package.json` and
-   `tree-sitter.json`, commit, `git tag -a vX.Y.Z`, push the tag.
+1. Tag the grammar first. In `tree-sitter-native`, `just bump X.Y.Z` (the version is compiled into
+   `parser.c`, so it edits two files and regenerates), commit, then `just release vX.Y.Z`.
 2. Point `rev` in `extension.toml` at that commit's SHA. Zed clones by revision, so a tag name
    would resolve but the SHA is what belongs in the manifest.
 3. Bump `version` in `extension.toml` and `Cargo.toml` together. `just check-versions` enforces
    that they match, and the tag names both.
-4. Tag and push here. `release.yml` runs
-   [zed-extension-action](https://github.com/huacnlee/zed-extension-action), which pushes a branch
-   to the `alvgaona/zed-extensions` fork and opens the PR against `zed-industries/extensions`.
+4. `just release vX.Y.Z` here.
 
-The action needs a `COMMITTER_TOKEN` repository secret with `public_repo` scope. Without it the
-run fails at the first API call with `401 Bad credentials`, and the tag is still published, so
-re-tagging is not needed — just add the secret and re-run the workflow.
+Then get it into the registry, by either route. Both produce the same pull request.
+
+**By hand:** in a checkout of your `zed-industries/extensions` fork, `just init-submodule
+extensions/native-sdk`, check the submodule out at the tag's SHA, bump `version` in
+`extensions.toml`, and open the PR. Do not use `git submodule update --remote` — it follows the
+default branch tip rather than your tag, and `extensions.toml` must carry the version that
+`extension.toml` declares at the pinned commit.
+
+**By workflow:** create a classic PAT with `repo` and `workflow` scopes, `gh secret set
+COMMITTER_TOKEN`, run the Publish workflow with the tag, then revoke the token and delete the
+secret. The workflow is dispatch-only so the token never has to live in the repository between
+releases. `workflow` scope is not optional: the fork contains `.github/workflows/`, and GitHub
+rejects pushes touching those without it.
 
 ## License
 

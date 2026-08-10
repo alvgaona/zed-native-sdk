@@ -1,10 +1,13 @@
 name: Publish to zed-industries/extensions
 
+# Dispatch-only on purpose. COMMITTER_TOKEN is meant to be created at release time and revoked
+# after, so a tag push would only ever produce a run that skipped.
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "v*"
+    inputs:
+      tag:
+        description: The tag to publish, e.g. v0.1.0
+        required: true
 
 permissions:
   contents: write
@@ -16,13 +19,14 @@ jobs:
     env:
       COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
     steps:
-      # Without the secret the action fails on its first API call with 401, which makes every tag
-      # push look broken. Skip instead, and re-run this workflow once the token is set.
-      - name: Report a missing token
+      - name: Fail without a token
         if: env.COMMITTER_TOKEN == ''
-        run: echo "COMMITTER_TOKEN is not set, skipping the pull request to zed-industries/extensions" >> $GITHUB_STEP_SUMMARY
-      - uses: huacnlee/zed-extension-action@v1
-        if: env.COMMITTER_TOKEN != ''
+        run: |
+          echo "COMMITTER_TOKEN is not set. Create a classic PAT with repo and workflow scopes," >> $GITHUB_STEP_SUMMARY
+          echo "set it with gh secret set COMMITTER_TOKEN, and re-run this workflow." >> $GITHUB_STEP_SUMMARY
+          exit 1
+      - uses: huacnlee/zed-extension-action@v2
         with:
           extension-name: native-sdk
+          tag: ${{ inputs.tag }}
           push-to: alvgaona/zed-extensions
