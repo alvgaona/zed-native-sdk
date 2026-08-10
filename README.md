@@ -21,10 +21,26 @@ Not published yet. Clone the repo, then from Zed's **Extensions** page choose **
 Extension** (action: `zed::InstallDevExtension`) and select the directory. Zed builds the grammar
 and the extension itself; it installs the `wasm32-wasip2` Rust target through `rustup` if needed.
 
-For the language server, the `native` CLI must be on your `PATH`
-(`bun add -g @native-sdk/cli`). The contract-aware half of its checking — bindings and message
-tags verified against your app's real `Model` and `Msg` — additionally needs a fresh
-`zig-out/model-contract.zon`, which `native test` writes.
+For the language server, the `native` CLI must be on your `PATH` (`bun add -g @native-sdk/cli`),
+or installed in the project as `node_modules/.bin/native`, which takes precedence.
+
+### What the server does and does not do
+
+Measured against `native markup lsp` 0.1.0, by driving it over stdio:
+
+| | |
+| --- | --- |
+| Diagnostics, live on every keystroke | yes — grammar, vocabulary, structure, colour tokens |
+| More than one error at a time | **no** — one diagnostic per document, fail-fast |
+| Element completion (77) and attribute completion (62), element-aware | yes |
+| Attribute *value* completion | **no**, even where a wrong value's diagnostic lists the valid ones |
+| Hover documentation | yes, real prose per element and attribute |
+| Bindings and message tags checked against the app's `Model`/`Msg` | **no** — see below |
+
+That last row is the notable one. `native markup check` catches `binding does not name a model
+field` when run in an app directory with a fresh `zig-out/model-contract.zon`; the language server,
+given the same file in the same directory, reports nothing. The contract-aware phase does not
+appear to be wired into the LSP path, so those errors still only surface from the CLI.
 
 ## Layout
 
