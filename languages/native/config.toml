@@ -1,4 +1,5 @@
 name = "Native"
+grammar = "native"
 path_suffixes = ["native"]
 autoclose_before = ">})"
 block_comment = { start = "<!--", prefix = "", end = "-->", tab_size = 0 }
@@ -10,6 +11,6 @@ brackets = [
     { start = "!--", end = " --", close = true, newline = false, not_in = ["comment", "string"] },
 ]
 
-# No `grammar` key yet — it is Option<Arc<str>> in Zed's LanguageConfig, so the
-# language loads without one. That buys file association, the picker entry,
-# comment toggling and autoclose today; highlighting arrives with the grammar.
+# `grammar` is Option<Arc<str>> in Zed's LanguageConfig — the language loads without one, which is
+# how this shipped before the grammar existed: file association, picker entry, comment toggling and
+# autoclose all come from this file, not from the tree.
