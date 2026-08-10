@@ -14,7 +14,7 @@ repository = "https://github.com/alvgaona/zed-native-sdk"
 # emit an invalid C symbol.
 [language_servers.native-markup]
 name = "native markup"
-language = "Native"
+languages = ["Native"]
 
 [grammars.native]
 repository = "file:///Users/alvaro/git/zed-native-sdk"
