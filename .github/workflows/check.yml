@@ -13,6 +13,9 @@ jobs:
       - name: Validate the manifests
         run: |
           python3 -c "import tomllib, glob; [tomllib.load(open(p, 'rb')) for p in ['extension.toml'] + glob.glob('languages/*/config.toml')]"
+      - name: Check the versions agree
+        run: |
+          python3 -c "import tomllib; e=tomllib.load(open('extension.toml','rb'))['version']; c=tomllib.load(open('Cargo.toml','rb'))['package']['version']; assert e==c, f'extension.toml {e} != Cargo.toml {c}'"
       - name: Build the extension
         run: |
           rustup target add wasm32-wasip2

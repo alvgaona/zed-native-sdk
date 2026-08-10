@@ -2,11 +2,15 @@ default:
     just --list
 
 # what CI runs
-check: check-manifests build
+check: check-manifests check-versions build
 
 # check the manifests parse
 check-manifests:
     python3 -c "import tomllib,glob; [tomllib.load(open(p,'rb')) for p in ['extension.toml']+glob.glob('languages/*/config.toml')]; print('manifests ok')"
+
+# extension.toml and Cargo.toml must agree, since the tag names one of them
+check-versions:
+    python3 -c "import tomllib; e=tomllib.load(open('extension.toml','rb'))['version']; c=tomllib.load(open('Cargo.toml','rb'))['package']['version']; assert e==c, f'extension.toml {e} != Cargo.toml {c}'; print('version', e)"
 
 # build the extension wasm
 build:

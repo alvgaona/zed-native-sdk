@@ -1,5 +1,11 @@
 # Native SDK for Zed
 
+<p>
+	<a href="https://github.com/alvgaona/zed-native-sdk/actions/workflows/check.yml"><img src="https://img.shields.io/github/actions/workflow/status/alvgaona/zed-native-sdk/check.yml?branch=main&label=check&colorA=000000&colorB=c1c1c1&style=for-the-badge"></a>
+	<a href="https://github.com/alvgaona/zed-native-sdk/blob/main/LICENSE"><img src="https://img.shields.io/github/license/alvgaona/zed-native-sdk?colorA=000000&colorB=dd9999&style=for-the-badge"></a>
+	<a href="https://github.com/alvgaona/zed-native-sdk/stargazers"><img src="https://img.shields.io/github/stars/alvgaona/zed-native-sdk?colorA=000000&colorB=a06666&style=for-the-badge"></a>
+</p>
+
 Language support for [Native SDK](https://native-sdk.dev/) `.native` markup in
 [Zed](https://zed.dev). Highlighting comes from a Tree-sitter grammar; diagnostics, hover and
 completion come from the SDK's own language server.
@@ -60,6 +66,24 @@ before committing.
 
 Highlighting needs the grammar even though the server exists, because Zed builds it from
 Tree-sitter queries and ignores LSP semantic tokens.
+
+## Releasing
+
+Two repos, and this one pins the other, so the order matters.
+
+1. Tag the grammar first. In `tree-sitter-native`, bump `version` in `package.json` and
+   `tree-sitter.json`, commit, `git tag -a vX.Y.Z`, push the tag.
+2. Point `rev` in `extension.toml` at that commit's SHA. Zed clones by revision, so a tag name
+   would resolve but the SHA is what belongs in the manifest.
+3. Bump `version` in `extension.toml` and `Cargo.toml` together. `just check-versions` enforces
+   that they match, and the tag names both.
+4. Tag and push here. `release.yml` runs
+   [zed-extension-action](https://github.com/huacnlee/zed-extension-action), which pushes a branch
+   to the `alvgaona/zed-extensions` fork and opens the PR against `zed-industries/extensions`.
+
+The action needs a `COMMITTER_TOKEN` repository secret with `public_repo` scope. Without it the
+run fails at the first API call with `401 Bad credentials`, and the tag is still published, so
+re-tagging is not needed — just add the secret and re-run the workflow.
 
 ## License
 
