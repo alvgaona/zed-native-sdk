@@ -10,9 +10,7 @@ repository = "https://github.com/alvgaona/zed-native-sdk"
 name = "native markup"
 languages = ["Native"]
 
-# The key must stay `native`: Zed compiles with -Wl,--export=tree_sitter_<key>, so a hyphen would
-# emit an invalid C symbol. Zed checks the repository out at `rev` and compiles src/parser.c, which
-# is why the grammar repo commits its generated parser.
+# The key has to be `native`: Zed exports tree_sitter_<key>, and a hyphen is not a C identifier.
 [grammars.native]
 repository = "https://github.com/alvgaona/tree-sitter-native"
 rev = "7a5b8678abf2ab4f0453f46ae99242dfc452c67c"

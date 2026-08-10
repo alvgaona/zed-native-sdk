@@ -1,5 +1,4 @@
-<!-- A sample exercising every shape the queries capture. It is checked in so CI can run the
-     .scm files against a real parse without needing the SDK installed. -->
+<!-- Covers every shape the queries capture, so CI can run them without the SDK installed. -->
 
 <import src="components/md.native"/>
 

@@ -5,8 +5,7 @@ const BINARY_NAME: &str = "native";
 
 const LOCAL_BINARY: &str = "node_modules/.bin/native";
 
-/// The worktree's own CLI, if the project installed one. There is no existence check in the
-/// extension API, so a successful read is the test.
+/// The project's own CLI, if it has one. The extension API has no exists(), so reading is the test.
 fn local_binary(worktree: &zed::Worktree) -> Option<String> {
     worktree
         .read_text_file(LOCAL_BINARY)
@@ -26,17 +25,10 @@ impl zed::Extension for NativeSdkExtension {
         _language_server_id: &LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<zed::Command> {
-        // The server is a subcommand of the SDK's own CLI, so there is nothing to download and
-        // nothing to keep in sync — whichever `native` the project builds with is the one that
-        // checks the markup.
-        //
-        // A project-local install wins over the global one: an app that pins @native-sdk/cli as a
-        // dependency should be checked by the version it pins, not by whatever is on PATH.
+        // A pinned dependency beats whatever happens to be on PATH.
         let command = local_binary(worktree)
             .or_else(|| worktree.which(BINARY_NAME))
             .ok_or_else(|| {
-                // Highlighting does not depend on this, so say so — otherwise the failure reads
-                // like the extension is broken to someone who just opened a .native file.
                 "the `native` CLI was not found, so diagnostics, hover and completion are off \
                  (highlighting is unaffected). Install it with `bun add -g @native-sdk/cli`."
                     .to_string()

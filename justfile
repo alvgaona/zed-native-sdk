@@ -1,29 +1,30 @@
 default:
     just --list
 
-# everything CI runs
+# what CI runs
 check: check-manifests build
 
-# validate that the manifest and every language config parse
+# check the manifests parse
 check-manifests:
     python3 -c "import tomllib,glob; [tomllib.load(open(p,'rb')) for p in ['extension.toml']+glob.glob('languages/*/config.toml')]; print('manifests ok')"
 
-# compile the language-server half of the extension
+# build the extension wasm
 build:
     cargo build --target wasm32-wasip2
 
-# run every query file against real markup, using a sibling tree-sitter-native checkout
+# run the queries against a sibling tree-sitter-native checkout
 check-queries grammar="../tree-sitter-native":
     #!/usr/bin/env bash
     set -euo pipefail
+    here="{{ justfile_directory() }}"
     cd "{{ grammar }}"
-    python3 scripts/extract-corpus.py
-    for q in {{ justfile_directory() }}/languages/native/*.scm; do
+    ./node_modules/.bin/tree-sitter parse -q "$here"/test/samples/*.native
+    for q in "$here"/languages/native/*.scm; do
       echo "== $(basename "$q")"
-      ./node_modules/.bin/tree-sitter query "$q" test/fixtures/*.native >/dev/null
+      ./node_modules/.bin/tree-sitter query "$q" "$here"/test/samples/*.native >/dev/null
     done
 
-# point the manifest at a local grammar checkout while iterating on the grammar
+# repoint the manifest at a local grammar checkout
 use-local-grammar grammar="../tree-sitter-native":
     #!/usr/bin/env bash
     set -euo pipefail

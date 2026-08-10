@@ -18,8 +18,7 @@ jobs:
           rustup target add wasm32-wasip2
           cargo build --target wasm32-wasip2 --release
 
-  # The queries are the half of the language that lives in this repo, so they are checked against
-  # the grammar they target — at the exact revision the manifest pins.
+  # Queries are checked against the grammar revision the manifest pins.
   queries:
     runs-on: ubuntu-latest
     steps:

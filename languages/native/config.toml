@@ -10,7 +10,3 @@ brackets = [
     { start = "<", end = ">", close = false, newline = true, not_in = ["comment", "string"] },
     { start = "!--", end = " --", close = true, newline = false, not_in = ["comment", "string"] },
 ]
-
-# `grammar` is Option<Arc<str>> in Zed's LanguageConfig — the language loads without one, which is
-# how this shipped before the grammar existed: file association, picker entry, comment toggling and
-# autoclose all come from this file, not from the tree.

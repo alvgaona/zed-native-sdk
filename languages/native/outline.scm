@@ -1,5 +1,4 @@
-; Templates are the only named, reusable unit in the language, so they are what the outline is
-; for — a 465-line view file is a handful of templates plus one root view.
+; Templates by name.
 ((element
   (start_tag
     (structure_tag) @context
@@ -10,7 +9,7 @@
   (#eq? @context "template")
   (#eq? @_attr "name")) @item
 
-; Structure tags carry the shape of the view; plain elements would drown it.
+; Structure tags only. Every element would be noise.
 ((element
   (start_tag
     (structure_tag) @name))

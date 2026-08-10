@@ -34,9 +34,7 @@
     "}"
   ] @punctuation.special)
 
-; The 17 builtins get a distinct colour where the theme has one, and fall back to plain @function
-; where it does not. Unknown names stay @function rather than becoming an error the grammar cannot
-; actually prove — the SDK's checker owns that judgement.
+; Builtins take @function.builtin when the theme has it, @function otherwise.
 ((call
   function: (identifier) @function @function.builtin)
   (#any-of? @function.builtin
