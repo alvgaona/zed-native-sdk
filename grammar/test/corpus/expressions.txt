@@ -1,0 +1,128 @@
+================================================================================
+Handler with a message tag and payload
+================================================================================
+
+<button on-press="copy_code_block:{b.code_index}" />
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (self_closing_tag
+      (element_name)
+      (attribute
+        (event_attribute
+          (event_name)
+          (message_tag)
+          (interpolation
+            (path
+              (identifier)
+              (identifier))))))))
+
+================================================================================
+Handler without a payload
+================================================================================
+
+<button on-press="add" />
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (self_closing_tag
+      (element_name)
+      (attribute
+        (event_attribute
+          (event_name)
+          (message_tag))))))
+
+================================================================================
+Template arguments, with and without defaults
+================================================================================
+
+<template name="timeline" args="gap=0 grow=0 label=">
+  <slot />
+</template>
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (start_tag
+      (structure_tag)
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (attribute_text)))
+      (attribute
+        (args_attribute
+          (args_name)
+          (argument
+            (argument_name)
+            (argument_default))
+          (argument
+            (argument_name)
+            (argument_default))
+          (argument
+            (argument_name)))))
+    (element
+      (self_closing_tag
+        (structure_tag)))
+    (end_tag
+      (structure_tag))))
+
+================================================================================
+Interpolated text mixing prose, calls and operators
+================================================================================
+
+<text>{percent(done / total)} complete — {upper(b.lang_label)}</text>
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (start_tag
+      (element_name))
+    (text
+      (interpolation
+        (call
+          (identifier)
+          (binary_expression
+            (path
+              (identifier))
+            (path
+              (identifier)))))
+      (interpolation
+        (call
+          (identifier)
+          (path
+            (identifier)
+            (identifier)))))
+    (end_tag
+      (element_name))))
+
+================================================================================
+Operator precedence: and binds tighter than or
+================================================================================
+
+<if test="{a or b and not c}" />
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (self_closing_tag
+      (structure_tag)
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (interpolation
+            (binary_expression
+              (path
+                (identifier))
+              (binary_expression
+                (path
+                  (identifier))
+                (unary_expression
+                  (path
+                    (identifier)))))))))))

@@ -1,0 +1,95 @@
+================================================================================
+Self-closing element with attributes
+================================================================================
+
+<separator background="border" />
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (self_closing_tag
+      (element_name)
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (attribute_text))))))
+
+================================================================================
+Structure tags are distinct from elements
+================================================================================
+
+<for each="visible" key="id" as="t">
+  <text>{t.title}</text>
+</for>
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (start_tag
+      (structure_tag)
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (attribute_text)))
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (attribute_text)))
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (attribute_text))))
+    (element
+      (start_tag
+        (element_name))
+      (text
+        (interpolation
+          (path
+            (identifier)
+            (identifier))))
+      (end_tag
+        (element_name)))
+    (end_tag
+      (structure_tag))))
+
+================================================================================
+Comments
+================================================================================
+
+<!-- A note about
+     the next element -->
+<column />
+
+--------------------------------------------------------------------------------
+
+(document
+  (comment)
+  (element
+    (self_closing_tag
+      (element_name))))
+
+================================================================================
+Numeric and boolean attribute values
+================================================================================
+
+<text size="12" wrap="true" disabled />
+
+--------------------------------------------------------------------------------
+
+(document
+  (element
+    (self_closing_tag
+      (element_name)
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (number)))
+      (attribute
+        (plain_attribute
+          (attribute_name)
+          (boolean)))
+      (attribute
+        (plain_attribute
+          (attribute_name))))))

@@ -1,0 +1,15 @@
+id = "native-sdk"
+name = "Native SDK"
+schema_version = 1
+version = "0.0.1"
+authors = ["alvgaona <alvgaona@gmail.com>"]
+description = "Syntax highlighting and language server support for Native SDK .native markup"
+repository = "https://github.com/alvgaona/zed-native-sdk"
+
+# Added once tree-sitter-native has a committed src/parser.c. The key must stay
+# `native`: Zed compiles the grammar with -Wl,--export=tree_sitter_<key>, so a
+# hyphen would emit an invalid C symbol.
+#
+# [grammars.native]
+# repository = "file:///Users/alvaro/git/tree-sitter-native"
+# rev = "..."

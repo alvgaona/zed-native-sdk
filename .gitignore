@@ -1,0 +1,14 @@
+**/.DS_Store
+
+# Local agent context — not part of the published extension
+.claude/
+CLAUDE.md
+
+# Grammar checkouts and compiled wasm, written by Zed when it builds the extension
+grammars/
+*.wasm
+target/
+
+# Generated from the local SDK install by grammar/scripts/extract-corpus.py
+grammar/test/fixtures/
+grammar/node_modules/
