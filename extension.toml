@@ -1,7 +1,7 @@
 id = "native-sdk"
 name = "Native SDK"
 schema_version = 1
-version = "0.0.1"
+version = "0.1.0"
 authors = ["alvgaona <alvgaona@gmail.com>"]
 description = "Syntax highlighting and language server support for Native SDK .native markup"
 repository = "https://github.com/alvgaona/zed-native-sdk"
@@ -13,4 +13,4 @@ languages = ["Native"]
 # The key has to be `native`: Zed exports tree_sitter_<key>, and a hyphen is not a C identifier.
 [grammars.native]
 repository = "https://github.com/alvgaona/tree-sitter-native"
-rev = "7a5b8678abf2ab4f0453f46ae99242dfc452c67c"
+rev = "5aec6739853ddc752399c3b032ac91ba6e93acf3"

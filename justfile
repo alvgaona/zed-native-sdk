@@ -44,3 +44,9 @@ use-local-grammar grammar="../tree-sitter-native":
     p.write_text(t)
     print(f"grammar -> file://{d} @ {rev[:8]}")
     PY
+
+# tag a release and push it
+release tag: check
+    git tag -a "{{ tag }}" -m "{{ tag }}"
+    git push origin "{{ tag }}"
+    gh release create "{{ tag }}" --title "{{ tag }}" --generate-notes
